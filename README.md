@@ -30,8 +30,8 @@
 ### Core Tasks
 1. **Fetch Data**  
    - Use the provided `msw` mock API in the remote app for product data.
-   - Display products in a suitable layout with name, description, and price.
-     > Note: the seed data includes `name`, `price`, `category`, and `rating`. If a description is needed, add a small field or derive one.
+   - Display products in a suitable layout.
+     > Note: the seed data includes `name`, `price`, `category`, `rating`, and `image`. If a description is needed, add a small field or derive one.
    
 2. **Host Integration**  
    - Host should load the `ProductList` component from the remote using Module Federation.
@@ -54,14 +54,19 @@
 - Keyboard support.
 - Visible focus outlines.
 
+### Unit Test Expectations
+
+- Write a few simple tests covering: data handling, user interactions, and component rendering.
+- Demonstrate testing approach rather than extensive coverage.
+
 ### What We Evaluate
 
-- Technical correctness: Does the host load the remote? Do features work?
-- Code quality: Structure, naming, component boundaries, typed props.
-- Design system usage: Consistency and clarity.
-- Accessibility: Semantics & keyboard behavior.
-- Performance awareness: Avoid unnecessary re-renders; sensible memoization.
-- Scope management: 3-hour timebox respected; clear notes in SUBMISSION.md.
+- **Technical correctness**: Does the host load the remote? Do features work?
+- **Code quality**: Structure, naming, component boundaries, typed props.
+- **Design system usage**: Consistency and clarity.
+- **Accessibility**: Semantics & keyboard behavior.
+- **Performance awareness**: Avoid unnecessary re-renders; sensible memoization.
+- **Scope management**: 3-hour timebox respected; clear notes in SUBMISSION.md.
 
 
 ---
