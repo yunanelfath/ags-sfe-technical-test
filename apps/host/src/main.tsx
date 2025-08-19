@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import ProductList from 'products/ProductList'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       </header>
       <main style={{ marginTop: 16 }}>
         <h1>Host Application</h1>
+        <ProductList />
       </main>
     </div>
   );
