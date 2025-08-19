@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 type Product = { id: string; name: string; price: number; category: string; rating: number; };
 type Props = { featureFlags?: { showRatings?: boolean } };
@@ -11,6 +11,22 @@ export default function ProductList({ featureFlags }: Props) {
 
   const categories = useMemo(() => ['all', ...Array.from(new Set(all.map(p => p.category)))], [all]);
 
+  const fetchProductData = async () => {
+    try {
+      const res = await fetch('/api/products')
+      
+      console.log({ res })
+      const products = await res.json()
+      
+      setAll(products)
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  useEffect(() => {
+    fetchProductData()
+  }, [])
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 8, alignItems: 'center' }} role="region" aria-label="Filters">
