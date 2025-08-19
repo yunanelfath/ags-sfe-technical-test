@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './msw/browser';
 import ProductList from './ProductList';
+import './msw/browser'
 
 function DevPage() {
   return (

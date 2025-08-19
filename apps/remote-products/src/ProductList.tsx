@@ -5,9 +5,12 @@ import {
   Typography,
   Pagination,
   CardMedia,
-  Button,
+  Backdrop,
+  CircularProgress,
   Box,
 } from "@mui/material";
+// import './msw/browser';
+
 
 type Product = { id: string; name: string; price: number; category: string; rating: number; image?: string; };
 type Props = { featureFlags?: { showRatings?: boolean } };
@@ -22,18 +25,22 @@ export default function ProductList({ featureFlags }: Props) {
   const [paginate, setPagination] = useState<Pagination>({
     page: 1, limit: 20
   })
+  const [loading, setLoading] = useState<boolean>(false)
 
   const categories = useMemo(() => ['all', ...Array.from(new Set(all.map(p => p.category)))], [all]);
 
   const fetchProductData = async () => {
     try {
+      setLoading(true)
       const res = await fetch('/api/products')
       
       const products = await res.json()
       setAll(products)
       setDefaultAll(products)
+      setLoading(false)
     } catch (error) {
       console.log({ error })
+      setLoading(false)
     }
   }
 
@@ -75,6 +82,14 @@ export default function ProductList({ featureFlags }: Props) {
   }, [category])
   return (
     <div>
+      {
+        loading && <Backdrop
+        open={loading}
+        onClick={() => setLoading(false)}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      }
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 8, alignItems: 'center' }} role="region" aria-label="Filters">
         <input placeholder="Search products…" aria-label="Search products" value={query} onChange={e => setQuery(e.target.value)} />
         <select aria-label="Filter by category" value={category} onChange={e => setCategory(e.target.value)}>
@@ -88,8 +103,8 @@ export default function ProductList({ featureFlags }: Props) {
       </div>
       <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',alignItems: 'center', marginTop: 20}}>
         {
-          !!displayedItems.length && displayedItems.map((s) => {
-            return <Card sx={{ maxWidth: 120,  minWidth: 150, marginTop: 3, marginBottom: 2}}>
+          !!displayedItems.length && displayedItems.map((s, indx: number) => {
+            return <Card sx={{ maxWidth: 120,  minWidth: 150, marginTop: 3, marginBottom: 2}} key={indx}>
             <CardMedia
               component="img"
               alt="green iguana"
