@@ -4,7 +4,7 @@
 
 - ⏱ **Time Limit:** 3 hours.
 - 📦 **Submission:** GitHub repo.
-- ⚽️ **Goal:** Create a catalogue UI using a **micro-frontend** setup built with **Vite** and [**Module Federation**](https://module-federation.io/) using **React 19** and TypeScript.
+- ⚽️ **Goal:** Create a catalogue UI using a **micro-frontend** setup built with **Vite**, [**Module Federation**](https://module-federation.io/), **React 19** and TypeScript.
 
 ### The project is structured as two applications:
 - **Host App** (`apps/host`) – consumes components from remotes.
