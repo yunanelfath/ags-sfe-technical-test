@@ -1,0 +1,26 @@
+{
+  "name": "vite-mf-catalog-challenge-react19",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n host,remote -c auto \"npm run dev -w host\" \"npm run dev -w remote-products\"",
+    "build": "npm run build -w host && npm run build -w remote-products",
+    "preview": "concurrently -k -n host,remote -c auto \"npm run preview -w host\" \"npm run preview -w remote-products\""
+  },
+  "devDependencies": {
+    "@module-federation/vite": "^1.7.1",
+    "@types/node": "^20.12.12",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "concurrently": "^9.0.1",
+    "typescript": "^5.5.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "apps/remote-products/public"
+    ]
+  }
+}
