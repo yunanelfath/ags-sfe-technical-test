@@ -6,3 +6,6 @@
 4. unnecessary render with useMemo to reduce the rendering complexity when we search by the keyword, categories and sort
 5. display the remote product include the functionality successfully
 6. host app could not load the mock server api/products
+
+![HostApp](./screenshots/host-app.png)
+![remoteProducts](./screenshots/remote-products.png)
