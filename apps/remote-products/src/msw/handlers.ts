@@ -27,6 +27,7 @@ export const handlers = [
     const data = generateProducts(2000);
     console.log({ data })
     await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log({ data })
     return HttpResponse.json(data);
   }),
 ];

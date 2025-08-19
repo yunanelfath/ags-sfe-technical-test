@@ -41,6 +41,7 @@ export default function ProductList({ featureFlags }: Props) {
     } catch (error) {
       console.log({ error })
       setLoading(false)
+      console.error(error)
     }
   }
 
