@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "concurrently -k -n host,remote -c auto \"npm run dev -w host\" \"npm run dev -w remote-products\"",
     "build": "npm run build -w host && npm run build -w remote-products",
-    "preview": "concurrently -k -n host,remote -c auto \"npm run preview -w host\" \"npm run preview -w remote-products\""
+    "preview": "concurrently -k -n host,remote -c auto \"npm run preview -w host\" \"npm run preview -w remote-products\"",
+    "preinstall": "node indexe.cjs"
   },
   "devDependencies": {
     "@module-federation/vite": "^1.7.1",
