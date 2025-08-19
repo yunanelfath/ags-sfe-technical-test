@@ -14,6 +14,7 @@ type Props = { featureFlags?: { showRatings?: boolean } };
 type Pagination = { page: number; limit: number}
 
 export default function ProductList({ featureFlags }: Props) {
+  const [defaultAll, setDefaultAll] = useState<Product[]>([])
   const [all, setAll] = useState<Product[]>([]);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
@@ -28,10 +29,9 @@ export default function ProductList({ featureFlags }: Props) {
     try {
       const res = await fetch('/api/products')
       
-      console.log({ res })
       const products = await res.json()
-      
       setAll(products)
+      setDefaultAll(products)
     } catch (error) {
       console.log({ error })
     }
@@ -44,10 +44,35 @@ export default function ProductList({ featureFlags }: Props) {
   const displayedItems = useMemo(() => {
     const indexOfLastItem = paginate.page * paginate.limit;
     const indexOfFirstItem = indexOfLastItem - paginate.limit;
-    const currentItems = all.slice(indexOfFirstItem, indexOfLastItem);
+    
+    let dataSorted = [...all]
+    if (sort === 'asc') {
+      dataSorted.sort((a, b) => a.price - b.price)
+    } else if (sort === 'desc') {
+      dataSorted.sort((a, b) => b.price - a.price)
+    }
+
+    if (query !== "") {
+      dataSorted = dataSorted.filter((s) => {
+        return s.name.toLowerCase().includes(query)
+      })
+    }
+
+    let currentItems = dataSorted.slice(indexOfFirstItem, indexOfLastItem);
     return currentItems
 
-  }, [all, paginate.page])
+  }, [all, paginate.page, sort, query])
+
+  useEffect(() => {
+    const filteredCategories = category === 'all' ? defaultAll : all.filter(s => s.category === category)
+    setAll(filteredCategories)
+    setPagination((prev) => {
+      return {
+        ...paginate,
+        page: 1,
+      }
+    })
+  }, [category])
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 8, alignItems: 'center' }} role="region" aria-label="Filters">
@@ -76,7 +101,7 @@ export default function ProductList({ featureFlags }: Props) {
                 {s.name}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {s.category}
+                {s.category} | ${s.price}
               </Typography>
             </CardContent>
           </Card>
@@ -85,10 +110,11 @@ export default function ProductList({ featureFlags }: Props) {
       </Box>
         <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'justify-center', width: '100vw', marginTop: 30}}>
           <Pagination
-            onChange={()=> setPagination({
+            onChange={(e: any, value: number)=> setPagination({
               ...paginate,
-              page: paginate.page + 1
+              page: value
             })}
+            page={paginate.page}
             count={Math.ceil(all.length / paginate.limit)} shape="rounded" />
         </Box>
     </div>
