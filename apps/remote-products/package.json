@@ -9,7 +9,10 @@
     "preview": "vite preview --port 3002"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "^9.9.0",
+    "@mui/material": "^7.3.1",
     "msw": "^2.2.14",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

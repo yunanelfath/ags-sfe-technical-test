@@ -1,13 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Pagination,
+  CardMedia,
+  Button,
+  Box,
+} from "@mui/material";
 
-type Product = { id: string; name: string; price: number; category: string; rating: number; };
+type Product = { id: string; name: string; price: number; category: string; rating: number; image?: string; };
 type Props = { featureFlags?: { showRatings?: boolean } };
+type Pagination = { page: number; limit: number}
 
 export default function ProductList({ featureFlags }: Props) {
   const [all, setAll] = useState<Product[]>([]);
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState<'asc'|'desc'>('asc');
+  const [paginate, setPagination] = useState<Pagination>({
+    page: 1, limit: 20
+  })
 
   const categories = useMemo(() => ['all', ...Array.from(new Set(all.map(p => p.category)))], [all]);
 
@@ -27,6 +40,14 @@ export default function ProductList({ featureFlags }: Props) {
   useEffect(() => {
     fetchProductData()
   }, [])
+
+  const displayedItems = useMemo(() => {
+    const indexOfLastItem = paginate.page * paginate.limit;
+    const indexOfFirstItem = indexOfLastItem - paginate.limit;
+    const currentItems = all.slice(indexOfFirstItem, indexOfLastItem);
+    return currentItems
+
+  }, [all, paginate.page])
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto auto', gap: 8, alignItems: 'center' }} role="region" aria-label="Filters">
@@ -40,6 +61,36 @@ export default function ProductList({ featureFlags }: Props) {
         </select>
         <button onClick={() => { setQuery(''); setCategory('all'); setSort('asc'); }}>Reset</button>
       </div>
+      <Box style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',alignItems: 'center', marginTop: 20}}>
+        {
+          !!displayedItems.length && displayedItems.map((s) => {
+            return <Card sx={{ maxWidth: 120,  minWidth: 150, marginTop: 3, marginBottom: 2}}>
+            <CardMedia
+              component="img"
+              alt="green iguana"
+              height="140"
+              image={s.image}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {s.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {s.category}
+              </Typography>
+            </CardContent>
+          </Card>
+          })
+        }
+      </Box>
+        <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'justify-center', width: '100vw', marginTop: 30}}>
+          <Pagination
+            onChange={()=> setPagination({
+              ...paginate,
+              page: paginate.page + 1
+            })}
+            count={Math.ceil(all.length / paginate.limit)} shape="rounded" />
+        </Box>
     </div>
   );
 }
